@@ -226,20 +226,41 @@ class TNTSearchPlugin extends Plugin
      */
     public function onTwigSiteVariables()
     {
-        $twig = $this->grav['twig'];
+        // setup
+        $page = 			$this->grav['page'];
+        $pages = 			$this->grav['pages'];
+        $twig = 			$this->grav['twig'];
+        $assets = 		$this->grav['assets'];
 
         if ($this->query) {
             $twig->twig_vars['query'] = $this->query;
             $twig->twig_vars['tntsearch_results'] = $this->results;
         }
 
-        if ($this->config->get('plugins.tntsearch.built_in_css')) {
-            $this->grav['assets']->addCss('plugin://tntsearch/assets/tntsearch.css');
+        if ($page->template() == 'search')
+        {
+
+          // styles
+          if ($this->config->get('plugins.tntsearch.built_in_css')) {
+            $css = 'plugin://tntsearch/assets/tntsearch.css';
+            $assets->addCss($css, 100, false, 'photon-plugins' );
+          }
+
+          // scripts
+          if ($this->config->get('plugins.tntsearch.built_in_js')) {
+            $js = 'plugin://tntsearch/assets/tntsearch.js';
+            $assets->addJs($js, 100, false, 'defer', 'photon-plugins' );
+          }
+
         }
-        if ($this->config->get('plugins.tntsearch.built_in_js')) {
-            // $this->grav['assets']->addJs('plugin://tntsearch/assets/tntsearch.js');
-            $this->grav['assets']->addJs('plugin://tntsearch/assets/tntsearch.js');
-        }
+
+        // if ($this->config->get('plugins.tntsearch.built_in_css')) {
+        //     $this->grav['assets']->addCss('plugin://tntsearch/assets/tntsearch.css');
+        // }
+        // if ($this->config->get('plugins.tntsearch.built_in_js')) {
+        //     // $this->grav['assets']->addJs('plugin://tntsearch/assets/tntsearch.js');
+        //     $this->grav['assets']->addJs('plugin://tntsearch/assets/tntsearch.js');
+        // }
     }
 
     /**
